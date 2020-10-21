@@ -42,20 +42,74 @@ string GetFilenameWithCreating()
 	file.close();
 	return filename;
 }
-void DelNumsFromText(const string& filename, const string& filename2)
+void DelNumsFromText(const string& filename)
+{
+	std::chrono::time_point<std::chrono::system_clock> start;
+
+	fstream file;
+	fstream file2;
+	string str;
+
+	file.open(filename);
+	file2.open(GetFilenameWithCreating());
+
+	while (!file.eof())
+	{
+		getline(file, str);
+		str.erase(boost::remove_if(str, boost::is_any_of("1234567890")), str.end());
+		auto it = str.begin();
+		while (it != str.end())
+		{
+			file2.put(*it);
+			it++;
+		}
+		file2.put('\n');
+	}
+	file.close();
+	file2.close();
+
+	std::chrono::time_point<std::chrono::system_clock> end;
+	int elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
+	cout << "\n\n Время выполнения " << elapsed_seconds << " секунд\n";
+}
+
+bool check(char t)
+{
+	if (t == '0') return true;
+	if (t == '1') return true;
+	if (t == '2') return true;
+	if (t == '3') return true;
+	if (t == '4') return true;
+	if (t == '5') return true;
+	if (t == '6') return true;
+	if (t == '7') return true;
+	if (t == '8') return true;
+	if (t == '9') return true;
+	return false;
+}
+void NumCount(const string& filename)
 {
 	std::chrono::time_point<std::chrono::system_clock> start;
 
 	fstream file;
 	string str;
+	int counter = 0;
+
 	file.open(filename);
+
 	while (!file.eof())
 	{
-		file >> str;
-		str.erase(boost::remove_if(str, boost::is_any_of("1234567890")), str.end());
-		cout << str << " ";
+		getline(file, str);
+		auto it = str.begin();
+		while (it != str.end())
+		{
+			if (check(*it)) counter++;
+			it++;
+		}
 	}
 	file.close();
+
+	cout << "В файле " << filename << " " << counter << " чисел";
 
 	std::chrono::time_point<std::chrono::system_clock> end;
 	int elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
@@ -80,8 +134,9 @@ int main()
 			if (choose < 0 || choose > 2) cout << "Введите корректное значение";
 			cout << "\n\nЧто вы хотите сделать?\n\n";
 			cout << "0 - выйти\n";
-			cout << "1 - Удалить все цифры из текста и вывести их количество\n";
-			cout << "2 - Заменить данную последовательность на введённую\n";
+			cout << "1 - Удалить все цифры из текста\n";
+			cout << "2 - Узнать количество цифр в данном файле\n";
+			cout << "3 - Заменить данную последовательность на введённую\n";
 			cin >> choose;
 		} while (choose < 0 || choose > 2);
 		switch (choose)
@@ -90,19 +145,11 @@ int main()
 			return 0;
 			break;
 		case 1:
-			do
-			{
-				if (choose < 0 || choose > 1) cout << "Введите корректное значение";
-				cout << "\n\nЧто вы хотите сделать?\n\n";
-				cout << "0 - вывести текст без текста в консоль\n";
-				cout << "1 - вывести текст без текста в файл\n";
-				cin >> choose;
-			} while (choose < 0 || choose > 1);
-			choose == 0 ? DelNumsFromText(filename, "?") : DelNumsFromText(filename, GetFilenameWithCreating());
-			choose = 1;
+			DelNumsFromText(filename);
 			break;
-		/*case 2:
-			break;*/
+		case 2:
+			NumCount(filename);
+			break;
 		}
 		system("pause");
 	}
