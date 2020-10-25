@@ -46,6 +46,7 @@ string GetFilenameWithCreating()
 void DelNumsFromText(const string& filename)
 {
 	std::chrono::time_point<std::chrono::system_clock> start;
+	start = std::chrono::system_clock::now();
 
 	fstream file;
 	fstream file2;
@@ -70,6 +71,7 @@ void DelNumsFromText(const string& filename)
 	file2.close();
 
 	std::chrono::time_point<std::chrono::system_clock> end;
+	end = std::chrono::system_clock::now();
 	int msec = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
 	cout << "\n\n Время выполнения " << msec << " миллисекунд\n";
 }
@@ -91,6 +93,7 @@ bool check(char t)
 void NumCount(const string& filename)
 {
 	std::chrono::time_point<std::chrono::system_clock> start;
+	start = std::chrono::system_clock::now();
 
 	fstream file;
 	string str;
@@ -114,6 +117,7 @@ void NumCount(const string& filename)
 	cout << "В файле " << filename << " " << counter << " чисел";
 
 	std::chrono::time_point<std::chrono::system_clock> end;
+	end = std::chrono::system_clock::now();
 	int msec = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
 	cout << "\n\n Время выполнения " << msec << " миллисекунд\n";
 }
@@ -121,6 +125,7 @@ void NumCount(const string& filename)
 void swapping(const string& filename)
 {
 	std::chrono::time_point<std::chrono::system_clock> start;
+	start = std::chrono::system_clock::now();
 
 	fstream file;
 	fstream file2;
@@ -159,6 +164,7 @@ void swapping(const string& filename)
 	file2.close();
 
 	std::chrono::time_point<std::chrono::system_clock> end;
+	end = std::chrono::system_clock::now();
 	int msec = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
 	cout << "\n\n Время выполнения " << msec << " миллисекунд\n";
 }
