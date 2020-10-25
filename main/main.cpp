@@ -35,13 +35,14 @@ string GetFilenameWithCreating()
 	ofstream file;
 	do
 	{
-		cout << "Введите имя файла:\n";
+		cout << "Введите имя файла, в который будет записана новая последовательность:\n";
 		cin >> filename;
-		file.open(filename);
+		file.open(filename, ios::trunc);
 	} while (!file.is_open());
 	file.close();
 	return filename;
 }
+
 void DelNumsFromText(const string& filename)
 {
 	std::chrono::time_point<std::chrono::system_clock> start;
@@ -69,8 +70,8 @@ void DelNumsFromText(const string& filename)
 	file2.close();
 
 	std::chrono::time_point<std::chrono::system_clock> end;
-	int elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
-	cout << "\n\n Время выполнения " << elapsed_seconds << " секунд\n";
+	int msec = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+	cout << "\n\n Время выполнения " << msec << " миллисекунд\n";
 }
 
 bool check(char t)
@@ -94,13 +95,14 @@ void NumCount(const string& filename)
 	fstream file;
 	string str;
 	int counter = 0;
+	string::iterator it;
 
 	file.open(filename);
 
 	while (!file.eof())
 	{
 		getline(file, str);
-		auto it = str.begin();
+		it = str.begin();
 		while (it != str.end())
 		{
 			if (check(*it)) counter++;
@@ -112,8 +114,53 @@ void NumCount(const string& filename)
 	cout << "В файле " << filename << " " << counter << " чисел";
 
 	std::chrono::time_point<std::chrono::system_clock> end;
-	int elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
-	cout << "\n\n Время выполнения " << elapsed_seconds << " секунд\n";
+	int msec = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+	cout << "\n\n Время выполнения " << msec << " миллисекунд\n";
+}
+
+void swapping(const string& filename)
+{
+	std::chrono::time_point<std::chrono::system_clock> start;
+
+	fstream file;
+	fstream file2;
+	string str;
+	string s_del;
+	string s_add;
+
+	file.open(filename);
+	file2.open(GetFilenameWithCreating());
+
+	system("cls");
+	cout << "Введите строку, которую хотите заменить "; 
+	getline(cin, s_del);
+	getline(cin, s_del);
+
+	cout << "Введите строку, на которую хотите заменить строку " << s_del << endl;
+	getline(cin, s_add);
+
+	while (!file.eof())
+	{
+		getline(file, str);
+		int pos = str.find(s_del);
+		if (pos > -1)
+		{
+			str.replace(pos, s_del.size(), s_add);
+		}
+		auto it = str.begin();
+		while (it != str.end())
+		{
+			file2.put(*it);
+			it++;
+		}
+		file2.put('\n');
+	}
+	file.close();
+	file2.close();
+
+	std::chrono::time_point<std::chrono::system_clock> end;
+	int msec = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+	cout << "\n\n Время выполнения " << msec << " миллисекунд\n";
 }
 
 int main()
@@ -131,14 +178,14 @@ int main()
 		system("cls");
 		do
 		{
-			if (choose < 0 || choose > 2) cout << "Введите корректное значение";
+			if (choose < 0 || choose > 3) cout << "Введите корректное значение";
 			cout << "\n\nЧто вы хотите сделать?\n\n";
 			cout << "0 - выйти\n";
 			cout << "1 - Удалить все цифры из текста\n";
 			cout << "2 - Узнать количество цифр в данном файле\n";
 			cout << "3 - Заменить данную последовательность на введённую\n";
 			cin >> choose;
-		} while (choose < 0 || choose > 2);
+		} while (choose < 0 || choose > 3);
 		switch (choose)
 		{
 		case 0:
@@ -150,7 +197,11 @@ int main()
 		case 2:
 			NumCount(filename);
 			break;
+		case 3:
+			swapping(filename);
+			break;
 		}
+
 		system("pause");
 	}
 	return 0;

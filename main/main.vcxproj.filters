@@ -23,6 +23,9 @@
     <Text Include="file.txt">
       <Filter>Файлы ресурсов</Filter>
     </Text>
+    <Text Include="file2.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
